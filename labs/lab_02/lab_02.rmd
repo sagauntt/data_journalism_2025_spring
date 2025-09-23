@@ -1,0 +1,122 @@
+---
+title: "lab_02"
+author: "Derek Willis"
+date: "2025-01-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries and establish settings
+
+```{r}
+# Turn off scientific notation
+options(scipen=999)
+
+# Load the tidyverse. If you have not installed the tidyverse already, remove the # from the next line and run it first.  
+# install.packages('tidyverse')
+library(tidyverse)
+library(lubridate)
+```
+
+## Load Data
+
+Let's keep working with the UMD courses and Maryland campaign expense data we used in the pre_lab.
+
+```{r}
+umd_courses <- read_rds("data/umd_courses.rds")
+maryland_expenses <- read_csv("data/maryland_expenses.csv")
+```
+
+## Answer questions
+
+**Q1.** How many departments have offered the courses with "Climate" in the title and at least one seat? Which department has offered the most? 
+
+**A1.** 32 departments offer a class with "Climate" in its title and at least one title. The department of Atmospheric and Oceanic Sciences have offered the most at 93 courses. 
+
+```{r}
+climate_courses <- umd_courses |> filter(str_detect(title, "Climate")) |> filter(seats >= 1) |>
+ group_by(department) |>
+  summarize(
+    count_department = n()
+    ) |>
+  arrange(desc(count_department))
+```
+
+**Q2.** Of the departments listed in A1, which one is the most interesting to you, and why?
+
+**A2.** I think its interesting that University Honors has 21 classes with "Climate" in the title and at least one, as it shows the university puts a certain priority on climate-related issues for its honors curriculum. 
+
+
+
+**Q3** Which departments offered the most courses in the Fall 2024 term? And which departments in that term have at least one syllabus posted? Answer both of those questions and then compare the top five departments - how are they different?
+
+**A3.** Atmospheric and Oceanic Science, Education Leadership, Higher Ed and International Ed, Mechanical Engineering, University Honors and Anthropology were the top 5 departments with the most classes with "climate" in their title and at least 1 seat in the fall 2024 semester. Additionally, the Atmospheric and Oceanic Science, Education Leadership, Higher Ed and International Ed, Mechanical Engineering and Physics departments have at least one syllabus listed. While the top 3 is the same for both, the lists differ as only 4 departments have at least one syllabus listed. 
+
+
+```{r}
+climate_courses <- umd_courses |> filter(str_detect(title, "Climate")) |> filter(seats >= 1) |> filter(str_detect(term, "202408")) |> filter(syllabus_count >= 1) |>
+ group_by(department, term) |>
+  summarize(
+    count_department = n()
+    ) |>
+  arrange(desc(count_department))
+```
+
+**Q4.** Using the Maryland campaign expenses data, change the datatype of the expenditure_date column so that it is a date and not a chr, saving the result as a new dataframe. Then create a new column for the month based on expenditure_date. Then write code that shows total amount spent each month by Wes Moore's committee (you'll need to search the data to find the exact name, and we're not looking in payee_name). Write a sentence describing the pattern of spending over time. 
+
+**A4.**Spending slowly ramped up throughout 2021 and 2022, until it reached peaks in June and July 2022 (the primary) and in October 2022 (ahead of general).
+
+```{r}
+maryland_expenses <- maryland_expenses |> mutate(expenditure_date=mdy(expenditure_date)) |> mutate(month = floor_date(expenditure_date, "month")) 
+
+moore_spending <- maryland_expenses |>
+  filter(committee_name == "Moore  Wes For Maryland") |>
+  group_by(month) |>
+  summarize(total_spent = sum(amount)) |>
+  arrange(desc(month))
+
+
+```
+
+**Q5.** Using case_when(), create a column in the Maryland expenses data called `spending_location` indicating whether each record spent money in Maryland or outside Maryland. For records that are in Maryland, make the new column's value "In-state" and for all others, make it "Out of state". Then write code that shows the total amount of money spent in each category and describe the results. You can do this in one statement or break it up into two statements (saving the new column to your dataframe). 
+
+**A5** R was giving me errors when using just the .default value to set the "out of state," but using a selection of both the largest states and neighboring states to estimate donations, it shows that the vast majority of spending was inside Maryland, though there was a sizable amount of out-of-state spending as well. 
+
+```{r}
+maryland_expenses <- maryland_expenses |>
+  mutate (
+    spending_location = case_when(
+      str_detect(address, " Maryland ") ~ "In-state",
+  str_detect(address, " Virginia ") ~ "Out of State",
+   str_detect(address, " Pennsylvania ") ~ "Out of State",
+  str_detect(address, " Washington ") ~ "Out of State",
+  str_detect(address, " New York ") ~ "Out of State",
+  str_detect(address, " New Jersey ") ~ "Out of State",
+  str_detect(address, " California ") ~ "Out of State",
+  str_detect(address, " Texas ") ~ "Out of State",
+  str_detect(address, " Florida ") ~ "Out of State",
+  .default = NA
+  )
+  )
+
+ state_origin_amount <- maryland_expenses |>
+  group_by(spending_location) |>
+  summarize(total = sum(amount)) |>
+  arrange(desc(total))
+```
+
+**Q6.** Choose your own adventure: using either the UMD courses or campaign expenses data, ask and answer a question that is different than the previous ones. You can use one of the ones you provided in the pre_lab. 
+
+**A6.** How many classes in Fall 2024 has the term "Diversity" in its course description? Answer: 13 courses had the term "Diversity" in their title during the Fall 2024 semester. 
+
+```{r}
+courses_diversity <- umd_courses |> filter(str_detect(title, "Diversity")) |> filter(str_detect(term, "202408")) |>
+ group_by(id) |>
+  summarize(
+    count_class = n()
+    ) |>
+  arrange(desc(count_class)) 
+```
