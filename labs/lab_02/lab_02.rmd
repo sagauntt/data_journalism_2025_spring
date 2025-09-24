@@ -89,18 +89,9 @@ moore_spending <- maryland_expenses |>
 maryland_expenses <- maryland_expenses |>
   mutate (
     spending_location = case_when(
-      str_detect(address, " Maryland ") ~ "In-state",
-  str_detect(address, " Virginia ") ~ "Out of State",
-   str_detect(address, " Pennsylvania ") ~ "Out of State",
-  str_detect(address, " Washington ") ~ "Out of State",
-  str_detect(address, " New York ") ~ "Out of State",
-  str_detect(address, " New Jersey ") ~ "Out of State",
-  str_detect(address, " California ") ~ "Out of State",
-  str_detect(address, " Texas ") ~ "Out of State",
-  str_detect(address, " Florida ") ~ "Out of State",
-  .default = NA
-  )
-  )
+      str_detect(address, 'Maryland') ~ 'In-state',
+      .default = 'Out of state'
+) )
 
  state_origin_amount <- maryland_expenses |>
   group_by(spending_location) |>
