@@ -34,6 +34,10 @@ payments <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_03
 # Load in the Maryland grants and loan data
 md_grants_loans <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_03/data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv")
 
+payments <- payments |> clean_names()
+
+md_grants_loans <- md_grants_loans |> clean_names()
+
 ```
 
 ## Answer questions
@@ -44,15 +48,15 @@ HINT: you should use filter() just once, and inside your filter you want to look
 
 When you have found as many as possible, save the result to a new dataframe called `pg_schools`. How many records did you find?
 
-A1:
+A1: I found 92 records for the school system. 
 
 ```{r}
-pg_schools <- cleaned_payments <- payments |> clean_names() |> filter(vendor_name == "PRINCE GEORGES COUNTY PUBLIC SCHOOLS" | vendor_name == "PRINCE GEORGE'S COUNTY PUBLIC SCHOOLS" | vendor_name == "PRINCE GEORGES COUNTY PUBLIC SCHOOL" |vendor_name == "PG COUNTY PUBLIC SCHOOL" | vendor_name == "PRINCE GEORGES PUBLIC SCHOOLS" | vendor_name == "PRINCE GEORGES COUNTY SCHOOL")
+pg_schools <- payments |> filter(vendor_name == "PRINCE GEORGES COUNTY PUBLIC SCHOOLS" | vendor_name == "PRINCE GEORGE'S COUNTY PUBLIC SCHOOLS" | vendor_name == "PRINCE GEORGES COUNTY PUBLIC SCHOOL" |vendor_name == "PG COUNTY PUBLIC SCHOOL" | vendor_name == "PRINCE GEORGES PUBLIC SCHOOLS" | vendor_name == "PRINCE GEORGES COUNTY SCHOOL"| vendor_name == "BOARD OF EDUCATION OF PRINCE GEORGE" | vendor_name == "BOARD OF EDUCATION OF PRINCE GEORGE'S COUNTY" | vendor_name == "BOARD OF EDUCATION OF PRINCE GEORGES COUNTY MD")
 ```
 
 Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? Are there any aspects of the results that stand out to you?
 
-A2:
+A2: Fiscal year 2024 had the largest total amount. The main aspect that stands out to me is that the total amount had a significant increase each fiscal year. 
 
 ```{r}
 pg_schools |> 
@@ -67,10 +71,10 @@ Q3. You're interested in examining the vendors paid for capital projects at the 
 
 Look carefully at that list - what cleaning will it require to ensure that you have only one row per vendor and zip code? Provide at least three examples of vendor names that are similar and should be combined into one. Describe in words how you might clean that data so that any nearly identical vendors would look identical - what would you change and how?
 
-A3. 
+A3. I would use the distinct() function to eliminate duplicate values of specific rows of data. There are several vendors listed at the same zip but with slight alterations to their name in the data. "VWR INTERNATIONAL LLC" is listed at the same zip as "VWR INTERNATIONAL INC", "GE HEALTHCARE BIO-SCIENCES CORP" is listed at the same one as "GE HEALTHCARE BIO-SCIENCES CORP," and "WDG ARCHITECTURE PLLC" is listed alongside "WDG ARCHITECTURE." These are all values that could potentially be combined. 
 
 ```{r}
-UMD_capital_projects <- cleaned_payments |> filter(agency_name =="CAPITAL PROJECTS- UNIVERSITY OF MARYLAND") |>
+UMD_capital_projects <- payments |> filter(agency_name =="CAPITAL PROJECTS- UNIVERSITY OF MARYLAND") |>
   group_by(vendor_name, vendor_zip) |>
   summarise(
     total_amount = sum(amount)
@@ -80,21 +84,27 @@ UMD_capital_projects <- cleaned_payments |> filter(agency_name =="CAPITAL PROJEC
 
 Q4: You want to understand how much state grant money went to stem cell research projects each fiscal year. Search the data to find grants that fit that description. Once you find which column(s) contain the information you want, your code should find just the grants for stem cell research in a single filter. Then calculate the total amount of money for each fiscal year. Write a sentence summarizing how stem cell research funding has changed over time.
 
-A4:
+A4: Funding for stem cell research in Maryland mostly varied between about 4.8-9.2 million dollars each year, but had peaks of 14.6 million and 12.4 million dollars in 2009 and 2023, respectively. 
 
 ```{r}
-stem_cell_grants <- md_grants_loans |> filter(str_detect(Description, "STEM CELL") | str_detect(Description, "Stem Cell")) |>
-  group_by(`Fiscal Year`) |>
+stem_cell_grants <- md_grants_loans |> mutate(description = str_to_upper(description)) |> filter(str_detect(description, "STEM CELL")) |>
+  group_by(fiscal_year) |>
   summarise (
-    total_amount = sum(Amount)
+    total_amount = sum(amount)
   ) |>
-  arrange(desc(`Fiscal Year`))
+  arrange(desc(fiscal_year))
 ```
 
 Q5: Using the Maryland grants and loan data, find records where the zip code is the one where the University of Maryland-College Park is located in and produce a list of grantees from that zip code, along with the total amount they received. Write a paragraph explaining how many grantees are there, what you would need to do to clean the results so that you had one record per grantee and which grantees are most interesting to you?
 
-A5:
+A5: There are 50 total grantees that are listed at the University of Maryland, College Park's sip code. I would use the distinct() function to save only value for each specific record. I found the Branchville Fire Dept., the Pregnancy Aid Center and Ikea as the most interesting grantees listed in the data. 
 
 ```{r}
-UMCP_zip <- cleaned_md_grants_loans <- md_grants_loans |> clean_names() |> filter(zip_code == "20740" | zip_code == "20742")
+UMCP_zip <- md_grants_loans |> filter(zip_code == "20740" | zip_code == "20742") |>
+  group_by(grantee, zip_code) |>
+  summarise(
+    total_amount = sum(amount)
+  ) |>
+  arrange(desc(total_amount))
+  
 ```
