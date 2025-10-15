@@ -58,7 +58,7 @@ md_expenses <- read.csv("data/Maryland_Expenses.csv") |>
 4.  When you are done standardizing `payee_clean`, export it as a new CSV file to your data folder, *giving it a different name* and read it back into RStudio as a new dataframe.
 5.  Using that `payee_clean` column in your new dataframe, calculate the total amount of Facebook spending by each committee and present the results showing the committee that spent the most first.
 
-**A1.**
+**A1.** The committee "Franchot Peter Friends Of" spent the most on Facebook ads, at a total of $36372.68.
 
 ```{r}
 media_expenses <- md_expenses |>  filter(expense_category == "Media" & payee_name != "NA")
@@ -67,35 +67,43 @@ write.csv(media_expenses, "data/media_expenses.csv")
 
 cleaned_media_expenses <- read.csv("data/cleaned_media_expenses.csv")
 
-cleaned_media_expenses |> 
-  group_by(committee_name) |>
-  summarise(
-    total_amount=sum(amount)
-  ) |> 
+facebook_spending <- cleaned_media_expenses |> 
+  filter(str_detect(payee_clean, "Facebook")) |> 
+  group_by(committee_name) |> 
+  summarise(total_amount = sum(amount)) |> 
   arrange(desc(total_amount))
   
 ```
 
 **Q2.** Let's do some research on the top committees from question 1. Look up the top 10 spenders: if they are candidate committees, what offices were they running for? If they were not candidates, what issues do they seem to care about? Write some sentences answering those questions, then go the Facebook ad library ([https://www.facebook.com/ads/library/?active_status=all&ad_type=political_and_issue_ads&country=US&sort_data\\[direction\\]=desc&sort_data\\[mode\\]=relevancy_monthly_grouped&media_type=all](https://www.facebook.com/ads/library/?active_status=all&ad_type=political_and_issue_ads&country=US&sort_data%5Bdirection%5D=desc&sort_data%5Bmode%5D=relevancy_monthly_grouped&media_type=all){.uri}) and look for ads from the top spender. What do you notice about the the information provided about those ads?
 
-**A2.**
+**A2.** 
+The committees listed were primarily for political campaigns, including county council members, state delegates and several campaigns from the 2022 gubernatorial election. Peter Franchot, the former state comptroller who ran to be the democratic candidate for governor in 2022, had the most spending on Facebook, totaling more than 36,000 dollars. Other campaigns include Robin Grammer, a republican state delegate from Baltimore County. The other committees in the Top 10 include immigration advocacy organization Casa in Action, which spent more than 11,000 dollars on Facebook ads, and the Working Families Party National PAC, which spent 10,000 dollars exactly. CASA spends on a variety of ads, including information about events or protests and endorsements for political candidates. The politicians' issues vary. John King, for example, centered many of his ads around climate issues and education, while Grammer 
+
+In terms of the ads themselves, Facebook includes information on when they ran, what platforms they ran on, and the categories they're listed as. Some of the ads also had estimated audience size, reach and cost. I also found it interesting that many of the political candidates' committees' ads were removed by Facebook. Jon Baron and Robin Grammer both had essentially all of their ads removed for lacking the proper disclosure required by Facebook. 
 
 **Q3.** Given the list of top spenders in A1 and the primary results for governor (<https://elections.maryland.gov/elections/2022/primary_results/gen_results_2022_1.html>), who is missing from that Q1 list? Did those campaigns run Facebook ads? Who are the biggest recipients of media expenses by the Democratic primary winner for governor (HINT: that person has two committees, the second one with his running mate)?
 
-**A3.**
+**A3.**The Q1 list is missing candidates including Democrats Rushern L. Baker, III and Nancy Navarro, Douglas F. Gansler and Candace Hollingsworth, Ralph W. Jaffe and Mark Greben, Wes Moore and Aruna Miller, Tom Perez and Shannon Sneed, and Republicans Dan Cox and Gordana Schifanelli, Robin Ficker and LeRoy F. Yegge, Jr., Kelly Schulz and Jeff Woolford, and Joe Werner and Minh Thanh Luong. Those campaigns did not spend directly on Facebooks ads. The biggest recipients from the Democratic primary winner, Wes Moore, include consulting firm SKDK and digital strategy firm Foglamp.
+
 
 ```{r}
-
+Moore_spending <- cleaned_media_expenses |> filter(committee_name== "Moore Miller For Maryland Slate" | committee_name == "Moore  Wes For Maryland") |>   group_by(payee_clean) |> 
+  summarise(total_amount = sum(amount)) |> 
+  arrange(desc(total_amount))
 ```
 
 **Q4.** The media expense data you cleaned also has a standardized purpose column. Write code to generate a list of the committees with the total amount of spending on online advertising. How does this list compare to the one from Q1 about top Facebook spenders? Of the top 5 committees who spent the most on Facebook ads from Q1, are there any that appear to have spent *all* of their online advertising dollars on Facebook?
 
-**A4.**
+**A4.** This list differs as it now includes many more PACs and large organizations such as the Democratic Senate Caucus Committee of Maryland. 
 
 ```{r}
-
+online_ad_spending <- cleaned_media_expenses |> filter(expense_purpose == "Online Advertising") |> 
+   group_by(committee_name) |> 
+  summarise(total_amount = sum(amount)) |> 
+  arrange(desc(total_amount))
 ```
 
 **Q5** Your editor asks you to summarize your findings about spending on Facebook by Maryland political candidates. How much do we know and what don't we know? What's the best story idea you've found here?
 
-**A5**
+**A5**It seems the less successful candidates in the gubernatorial primary spent more directly on Facebook ads. The top two campaigns did not spend on Facebook ads. Wes Moore, who won the 2022 gubernatorial election, spent most of his money to strategy and consulting firms --- but I wonder if these firms may have purchased Facebook ads themselves. It also seems that no Republicans for governor spend directly on Facebook ads. Only 3 candidates for governor spent more than 10,000 dollars. The best story idea I've found here is that Moore, who won the election, seemingly didn't spend on Facebook ads and instead chose different online advertising strategies.
