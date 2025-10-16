@@ -95,7 +95,8 @@ Moore_spending <- cleaned_media_expenses |> filter(committee_name== "Moore Mille
 
 **Q4.** The media expense data you cleaned also has a standardized purpose column. Write code to generate a list of the committees with the total amount of spending on online advertising. How does this list compare to the one from Q1 about top Facebook spenders? Of the top 5 committees who spent the most on Facebook ads from Q1, are there any that appear to have spent *all* of their online advertising dollars on Facebook?
 
-**A4.** This list differs as it now includes many more PACs and large organizations such as the Democratic Senate Caucus Committee of Maryland. 
+**A4.** This list differs as it now includes many more PACs and large organizations such as the Democratic Senate Caucus Committee of Maryland or Maryland REALTORS Political Fund. It also includes several more major committees which did not spend on Facebook ads, such as Tom Perez for Maryland or the Moore Miller for Maryland Slate. Of the Top 5 committees from Q1, the Franchot Anderson-Walker for Maryland Slate and Friends of Ashwani Jain committees appeared to have spent the entirety of their funds on Facebook ads. 
+
 
 ```{r}
 online_ad_spending <- cleaned_media_expenses |> filter(expense_purpose == "Online Advertising") |> 
@@ -106,4 +107,4 @@ online_ad_spending <- cleaned_media_expenses |> filter(expense_purpose == "Onlin
 
 **Q5** Your editor asks you to summarize your findings about spending on Facebook by Maryland political candidates. How much do we know and what don't we know? What's the best story idea you've found here?
 
-**A5**It seems the less successful candidates in the gubernatorial primary spent more directly on Facebook ads. The top two campaigns did not spend on Facebook ads. Wes Moore, who won the 2022 gubernatorial election, spent most of his money to strategy and consulting firms --- but I wonder if these firms may have purchased Facebook ads themselves. It also seems that no Republicans for governor spend directly on Facebook ads. Only 3 candidates for governor spent more than 10,000 dollars. The best story idea I've found here is that Moore, who won the election, seemingly didn't spend on Facebook ads and instead chose different online advertising strategies.
+**A5**It seems the less successful candidates in the gubernatorial primary spent more directly on Facebook ads. The top two Democratic campaigns in the primary did not spend on Facebook ads. Wes Moore, who won the 2022 gubernatorial election, spent most of his money to strategy and consulting firms --- but I wonder if these firms may have purchased Facebook ads themselves. It also seems that no Republicans for governor spend directly on Facebook ads. Only 3 candidates for governor spent more than 10,000 dollars. The best story idea I've found here is that Moore, who won the election, and Tom Perez, who came in second, both seemingly didn't spend on Facebook ads. I think it'd be interesting to look into how their advertising strategies were different from other candidates and where they spent their funds instead. 
