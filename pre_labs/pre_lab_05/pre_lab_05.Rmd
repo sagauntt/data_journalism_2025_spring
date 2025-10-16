@@ -97,7 +97,9 @@ You can now export that extracted table to a CSV file using the "Export" button.
 
 ### Task 5: Export the CSV file
 
-**Task** Export the CSV file to your pre_lab_05 folder and read it into R by running the following codeblock. What problems do you see with the data? **Answer**
+**Task** Export the CSV file to your pre_lab_05 folder and read it into R by running the following codeblock. What problems do you see with the data? 
+
+**Answer** There are still lines of dots on the area entries, and the columns dont have headers they are just the first row of data for Maryland as a whole.
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv") |> clean_names()
@@ -111,7 +113,9 @@ The good news is that we have data we don't have to retype. The bad news is, we 
 
 ### Task 6: Load the data without headers
 
-**Task** Load the data without headers by running the codeblock below. What problems remain? **Answer**
+**Task** Load the data without headers by running the codeblock below. What problems remain? 
+
+**Answer**Maryland is now included in the row of data and the columns have headers, but they aren't descriptive and don't tell readers what the chart is measuring. There are also still dots in the entries in the first column. 
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) |> clean_names()
@@ -123,7 +127,9 @@ Ok, now we have all the data. But we need actual headers. Let's add those using 
 
 ### Task 7: Change the headers to real names
 
-**Task** Run the codeblock below. What else do we need to do? **Answer**
+**Task** Run the codeblock below. What else do we need to do? 
+
+**Answer** The columns are now properly named, but the dots in the first column remain. We need to remove those. 
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) |> 
