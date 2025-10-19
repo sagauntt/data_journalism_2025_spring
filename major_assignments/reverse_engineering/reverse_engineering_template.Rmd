@@ -36,6 +36,9 @@ library(stringr)
 
 In this section, describe the source of the data, write a basic data dictionary for data you are working with, and discuss any caveats or issues you discovered working with this data. 
 
+**Answer** This data was compiled by The Washington Post using publicly-available government records, local news reports, social media and independent databases. After looking through the data, it appears very clean. The column names are all standardized, the date column is in the proper format, each entry is properly formatted for the column type. There don't appear to be duplicate entries. The only caveat is that this data is more recent that what The Washington Post used for its story. The article was published in 2020, but the database has entries all the way up to 2024. 
+
+
 ```{r}
 # Load required data
 
@@ -47,7 +50,6 @@ fatal_police_shooting_agencies <- read_csv("~/Documents/GitHub/data_journalism_2
 
 fatal_police_shootings <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/major_assignments/reverse_engineering/data/fatal-police-shootings-data.csv")
 
-
 ```
 
 ## Sentences to Engineer
@@ -55,7 +57,8 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 1
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: The Post found only one other fatal shooting that closely matched Taylor’s case — a Black woman, unarmed, killed during a raid at home while a boyfriend shot at police. But 139 other cases shared one or more of the circumstances in which Taylor was killed. Of the 247 women fatally shot, 48 were Black and seven of those were unarmed.
+
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
@@ -67,7 +70,8 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 2
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: At least 89 of the women were at their homes or residences where they sometimes stayed. And 12 of those women killed at home were shot by officers who were there to conduct a search or make an arrest.
+
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
@@ -79,7 +83,8 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 3
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: For both genders, a gun was the most common weapon. Of men killed, 57 percent were armed with a gun and of women, 44 percent. In other cases, women were armed with knives, cars, toy weapons, hammers and hatchets. By race, 147 of the women killed were White, 48 Black and 29 Hispanic. Five were Native American, four were Asian and three were other races. In 11 cases, race could not be determined. By percentages, men shot by police were less often White and more often Black or Hispanic.
+
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
@@ -91,7 +96,8 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 4
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: As with the fatal shootings of men, the majority of women killed were armed. But women were more often fatally shot when unarmed [and]... About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed.
+
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
@@ -103,7 +109,8 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 5
 
-* **Sentence text**: [Paste in sentence to engineer here]
+* **Sentence text**: In several cases, women called 911 to falsely report a crime and engaged officers with a weapon when they arrived. Other times, family members called police to the women’s homes, saying they were acting dangerously, according to The Post’s database.
+
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
 ```{r}
