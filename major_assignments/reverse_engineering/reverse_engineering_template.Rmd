@@ -1,7 +1,7 @@
 ---
 title: "Reverse Engineering Project"
-author: "Student names here"
-date: "Date here"
+author: Princess, Ellie and Sam 
+date: Oct. 18, 2025
 output:
   html_document:
     theme: cerulean
@@ -18,14 +18,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction 
 
-In this notebook, we are reverse engineering the story, [STORY NAME](STORY URL)
+In this notebook, we are reverse engineering the story, [Nearly 250 women have been
+fatally shot by police since 2015] (https://www.washingtonpost.com/graphics/2020/investigations/police-shootings-women/)
 
 ## Load libraries
 
 Loading required libraries for this analysis.
 
 ```{r echo=FALSE, message=FALSE}
-
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(stringr)
 ```
 
 ## Load and Cleaning Data
@@ -38,6 +42,10 @@ In this section, describe the source of the data, write a basic data dictionary 
 # Path to data should be loaded from folder "data" i.e. read_csv("data/name_of_data.csv")
 
 # Clean required data and prepare for analysis if needed. 
+
+fatal_police_shooting_agencies <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/major_assignments/reverse_engineering/data/fatal-police-shootings-agencies.csv")
+
+fatal_police_shootings <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/major_assignments/reverse_engineering/data/fatal-police-shootings-data.csv")
 
 
 ```
