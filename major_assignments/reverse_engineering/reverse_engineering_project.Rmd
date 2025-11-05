@@ -61,10 +61,32 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 * **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
 
+When filtered for women, regardless of race, the total of victims fatally shot is 422, nearly double the amount reported by the Post (not sure how to get nearly 250). Of the 422 women shot by the police, 87 were Black and female while nine were Black, female, and unarmed; Breanna Taylor is part of this list. I am unable to verify if these women were at home when they died because 1. their addresses are not included in the data set. Is there a way to generate a change where the longitute and latitude data into locations? Or would we need to look each one up and create a new column for it? 
+
+
 ```{r}
+fatal_race_armed <- fatal_police_shootings |>
+ filter(!is.na(race) & !is.na(armed_with))
+
 # Put code to reverse engineer sentence here
 
+fatal_race_armed |>
+select(race, gender, armed_with, name) |>
+  filter(
+    race == "B",
+    gender == "female")
+
 # Display results of code below this codeblock
+
+fatal_police_shootings |>
+select(race, gender, armed_with, name) |>
+filter(str_detect(race, "B")) |>
+filter(str_detect(gender, "female")) |>
+  filter(str_detect(armed_with, "unarmed"))
+
+fatal_race_armed |>
+select(race, gender, armed_with, name) |>
+  filter(gender == "female") 
 
 ```
 
@@ -85,27 +107,79 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 * **Sentence text**: For both genders, a gun was the most common weapon. Of men killed, 57 percent were armed with a gun and of women, 44 percent. In other cases, women were armed with knives, cars, toy weapons, hammers and hatchets. By race, 147 of the women killed were White, 48 Black and 29 Hispanic. Five were Native American, four were Asian and three were other races. In 11 cases, race could not be determined. By percentages, men shot by police were less often White and more often Black or Hispanic.
 
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Analysis summary**: Our analysis also shows that guns were the most common weapon that peoeple fatally shot by police were armed with. 58.5 percent of males were armed with a gun, while 45.9 percent of females were armed with a gun. Other top weapons for females included knives, vehicles, and "replicas." By race, 254 of the women were White, 88 were Black, 59 were Hispanic, 11 were Asian, 8 were Native American, and 41 were listed as n/a or other. For men, while White males were largest total group shop by police, they were less likely to be shot than Black males. For example, 24.1 percent of men fatally shot were Black, even though only about 14.4 percent of the nation's population is Black. Overall, our findings show similar trends to The Post's analysis, but specific percentages and numbers vary as the dataset has been updated with years' more of data since The Post wrote its story. 
 
 ```{r}
 # Put code to reverse engineer sentence here
+armed_with_male <- fatal_police_shootings |> filter(gender=="male") |> group_by(armed_with) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) |> mutate(pct_male =(incident_total/sum(incident_total))*100)
+
+armed_with_female <- fatal_police_shootings |> filter(gender=="female") |> group_by(armed_with) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) |> mutate(pct_female =(incident_total/sum(incident_total))*100)
+
+females_by_race <- fatal_police_shootings |> filter(gender=="female") |> group_by(race) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) 
+
+males_by_race <- fatal_police_shootings |> filter(gender=="male") |> group_by(race) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) |> mutate(race_pct =(incident_total/sum(incident_total))*100)
+
 
 # Display results of code below this codeblock
+view(armed_with_male)
 
+view(armed_with_female)
+
+view(females_by_race)
+
+view(males_by_race)
 ```
 
 ### Sentence 4
 
 * **Sentence text**: As with the fatal shootings of men, the majority of women killed were armed. But women were more often fatally shot when unarmed [and]... About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed.
 
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Analysis summary**: The first finding is that the majority of women killed were armed with a potential weapon at the time. We found that 90.5% of women killed were armed vs. 9.5% unarmed. For men, 94.3% were armed vs. 5.7% unarmed. This is accurate when compared to the article. However, the article lists that 89 percent of the women were armed, compared to 91 percent of the men. The percentages are a bit off, but that is due to how they classified armed vs. unarmed. The second finding is that about 31%, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22% of the 5,362 men killed. We got 31% of women killed had mental health issues and 19.2% of men had mental health issues. The percentage for women is correct, but we are unsure how to get the exact 22% of men. It may be because the data spans further than what the Post used. 
+
 
 ```{r}
 # Put code to reverse engineer sentence here
+library(dplyr)
 
-# Display results of code below this codeblock
+armed_binary <- fatal_police_shooting |>
 
+  filter(!armed_with %in% c("unknown", "undetermined") & !is.na(armed_with)) |>
+  mutate(
+    armed_status = case_when(
+      armed_with == "unarmed" ~ "unarmed",
+      TRUE ~ "armed" 
+    )
+  ) |>
+  group_by(gender, armed_status) |>
+  summarise(
+    n = n(),
+    .groups = "drop"
+  ) |>
+  group_by(gender) |>
+  mutate(
+    total = sum(n),
+    percent = round(100 * n / total, 1)
+  )
+
+armed_binary
 ```
+
+
+```{r}
+mental_health_by_gender <- fatal_police_shooting |>
+  mutate(gender = tolower(trimws(gender))) |>
+  filter(gender %in% c("male", "female")) |>
+  group_by(gender) |>
+  summarise(
+    total = n(),
+    mental_health_cases = sum(was_mental_illness_related == TRUE, na.rm = TRUE),
+    percent_mental_health = round(100 * mental_health_cases / total, 1),
+    .groups = "drop"
+  )
+
+mental_health_by_gender
+```
+
 
 ### Sentence 5
 
