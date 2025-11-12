@@ -93,98 +93,7 @@ select(race, gender, armed_with, name) |>
 
 ### Sentence 2
 
-* **Sentence text**: At least 89 of the women were at their homes or residences where they sometimes stayed. And 12 of those women killed at home were shot by officers who were there to conduct a search or make an arrest.
-
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
-
-```{r}
-# Put code to reverse engineer sentence here
-
-# Display results of code below this codeblock
-
-```
-
-### Sentence 3
-
-* **Sentence text**: For both genders, a gun was the most common weapon. Of men killed, 57 percent were armed with a gun and of women, 44 percent. In other cases, women were armed with knives, cars, toy weapons, hammers and hatchets. By race, 147 of the women killed were White, 48 Black and 29 Hispanic. Five were Native American, four were Asian and three were other races. In 11 cases, race could not be determined. By percentages, men shot by police were less often White and more often Black or Hispanic.
-
-* **Analysis summary**: Our analysis also shows that guns were the most common weapon that peoeple fatally shot by police were armed with. 58.5 percent of males were armed with a gun, while 45.9 percent of females were armed with a gun. Other top weapons for females included knives, vehicles, and "replicas." By race, 254 of the women were White, 88 were Black, 59 were Hispanic, 11 were Asian, 8 were Native American, and 41 were listed as n/a or other. For men, while White males were largest total group shop by police, they were less likely to be shot than Black males. For example, 24.1 percent of men fatally shot were Black, even though only about 14.4 percent of the nation's population is Black. Overall, our findings show similar trends to The Post's analysis, but specific percentages and numbers vary as the dataset has been updated with years' more of data since The Post wrote its story. 
-
-```{r}
-# Put code to reverse engineer sentence here
-armed_with_male <- fatal_police_shootings |> filter(gender=="male") |> group_by(armed_with) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) |> mutate(pct_male =(incident_total/sum(incident_total))*100)
-
-armed_with_female <- fatal_police_shootings |> filter(gender=="female") |> group_by(armed_with) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) |> mutate(pct_female =(incident_total/sum(incident_total))*100)
-
-females_by_race <- fatal_police_shootings |> filter(gender=="female") |> group_by(race) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) 
-
-males_by_race <- fatal_police_shootings |> filter(gender=="male") |> group_by(race) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) |> mutate(race_pct =(incident_total/sum(incident_total))*100)
-
-
-# Display results of code below this codeblock
-armed_with_male
-
-armed_with_female
-
-females_by_race
-
-males_by_race
-```
-
-### Sentence 4
-
-* **Sentence text**: As with the fatal shootings of men, the majority of women killed were armed. But women were more often fatally shot when unarmed [and]... About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed.
-
-* **Analysis summary**: The first finding is that the majority of women killed were armed with a potential weapon at the time. We found that 90.5% of women killed were armed vs. 9.5% unarmed. For men, 94.3% were armed vs. 5.7% unarmed. This is accurate when compared to the article. However, the article lists that 89 percent of the women were armed, compared to 91 percent of the men. The percentages are a bit off, but that is due to how they classified armed vs. unarmed. The second finding is that about 31%, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22% of the 5,362 men killed. We got 31% of women killed had mental health issues and 19.2% of men had mental health issues. The percentage for women is correct, but we are unsure how to get the exact 22% of men. It may be because the data spans further than what the Post used. 
-
-
-```{r}
-# Put code to reverse engineer sentence here
-library(dplyr)
-
-armed_binary <- fatal_police_shootings |>
-
-  filter(!armed_with %in% c("unknown", "undetermined") & !is.na(armed_with)) |>
-  mutate(
-    armed_status = case_when(
-      armed_with == "unarmed" ~ "unarmed",
-      TRUE ~ "armed" 
-    )
-  ) |>
-  group_by(gender, armed_status) |>
-  summarise(
-    n = n(),
-    .groups = "drop"
-  ) |>
-  group_by(gender) |>
-  mutate(
-    total = sum(n),
-    percent = round(100 * n / total, 1)
-  )
-
-armed_binary
-```
-
-
-```{r}
-mental_health_by_gender <- fatal_police_shootings |>
-  mutate(gender = tolower(trimws(gender))) |>
-  filter(gender %in% c("male", "female")) |>
-  group_by(gender) |>
-  summarise(
-    total = n(),
-    mental_health_cases = sum(was_mental_illness_related == TRUE, na.rm = TRUE),
-    percent_mental_health = round(100 * mental_health_cases / total, 1),
-    .groups = "drop"
-  )
-
-mental_health_by_gender
-```
-
-
-### Sentence 5 (new)
-
-* **Sentence text**: Black men, 12 percent of the male population, make up 27 percent of the men shot and 36 percent of the unarmed deaths. 
+* **Sentence text**:  Black men, 12 percent of the male population, make up 27 percent of the men shot and 36 percent of the unarmed deaths. 
 
 * **Analysis summary**: According to our analysis, Black men, who make up about 12 percent of the male population, make up roughly 24 percent of all men shot. But among unarmed men shot, Black men make up more than 32 percent of those shot. Black men are more likely to be shot while unarmed. 
 
@@ -215,5 +124,194 @@ black_men_unarmed
 black_male_population
 
 ```
+
+
+### Sentence 3
+
+* **Sentence text**: For both genders, a gun was the most common weapon. Of men killed, 57 percent were armed with a gun and of women, 44 percent. In other cases, women were armed with knives, cars, toy weapons, hammers and hatchets. By race, 147 of the women killed were White, 48 Black and 29 Hispanic. Five were Native American, four were Asian and three were other races. In 11 cases, race could not be determined. By percentages, men shot by police were less often White and more often Black or Hispanic. 
+
+* **Analysis summary**: Our analysis shows that both genders frequently used a gun as their weapon of choice. Half of the men, 58.5%, were armed with a gun, compared to women who chose a gun 45.9% of the time. 
+
+```{r}
+# Put code to reverse engineer sentence here
+armed_with_male <- fatal_police_shooting |> filter(gender=="male") |> group_by(armed_with) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) |> mutate(pct_male =(incident_total/sum(incident_total))*100)
+
+armed_with_female <- fatal_police_shooting |> filter(gender=="female") |> group_by(armed_with) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) |> mutate(pct_female =(incident_total/sum(incident_total))*100)
+
+females_by_race <- fatal_police_shooting |> filter(gender=="female") |> group_by(race) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) 
+
+males_by_race <- fatal_police_shooting |> filter(gender=="male") |> group_by(race) |> summarise(incident_total=n()) |> arrange(desc(incident_total)) |> mutate(race_pct =(incident_total/sum(incident_total))*100)
+
+# Display results of code below this codeblock
+view(armed_with_male)
+
+view(armed_with_female)
+
+view(females_by_race)
+
+view(males_by_race)
+```
+
+Other top weapon choices included knives, vehicles, and "replicas." 
+** what does replicas refer to? (refeer back to github data dictionary)
+** No category for hatchets or toy weapons, will need to refer to data dictionary to see how these categories are recorded. 
+
+Statement: By race, 147 of the women killed were White, 48 Black and 29 Hispanic.
+Finding: By race, 158 of the women killed were white, 49 Black and 34 Hispanic. 
+
+```{r}
+woman_total_race <- all_women |>
+ group_by(race) |>
+ summarise(
+    total_per_race = n()
+ )
+
+woman_total_race <- woman_total_race |>
+  mutate(
+    race = str_replace_all(race, "A", "asian"),
+    race = str_replace_all(race, "B", "black"),
+    race = str_replace_all(race, "H", "hispanic"),
+    race = str_replace_all(race, "W", "white"),
+    race = str_replace_all(race, "O", "other"), 
+    race = str_replace_all(race, "N", "native american"),
+  )
+
+```
+
+```{r}
+man_total_race <- all_men |>
+ group_by(race) |>
+ summarise(
+    total_per_race = n()
+ )
+
+man_total_race <- man_total_race |>
+    mutate(
+    race = str_replace_all(race, "A", "asian"),
+    race = str_replace_all(race, "B", "black"),
+    race = str_replace_all(race, "H", "hispanic"),
+    race = str_replace_all(race, "W", "white"),
+    race = str_replace_all(race, "O", "other"), 
+    race = str_replace_all(race, "N", "native american"),
+  )
+
+```
+
+By race, 254 of the women were White, 88 were Black, 59 were Hispanic, 11 were Asian, 8 were Native American, and 41 were listed as n/a or other. White men were the largest group fatally shot by the police, they were less likely to be shot than Black men. But the scale tips when you consider the true population size of these groups in America. For example, 24.1 percent of men fatally shot were Black, even though only about 14.4 percent of the nation's population is Black. Overall, our findings show similar trends to The Post's analysis, but specific percentages and numbers vary even when filtered to the specific time period analyzed by the Post. 
+
+### Sentence 4
+
+* **Sentence text**: As with the fatal shootings of men, the majority of women killed were armed. But women were more often fatally shot when unarmed [and]... About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed.
+
+* **Analysis summary**: 
+
+The first finding is that the majority of women killed were armed with a potential weapon at the time. We found that 90.5% of women killed were armed vs. 9.5% unarmed. For men, 94.3% were armed vs. 5.7% unarmed. This is accurate when compared to the article. However, the article lists that 89 percent of the women were armed, compared to 91 percent of the men. The percentages are a bit off, but that is due to how they classified armed vs. unarmed. The second finding is that about 31%, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22% of the 5,362 men killed. We got 31% of women killed had mental health issues and 19.2% of men had mental health issues. The percentage for women is correct, but we are unsure how to get the exact 22% of men. It may be because the data spans further than what the Post used. 
+
+
+```{r}
+# Put code to reverse engineer sentence here
+armed_binary <- fatal_police_shooting |>
+
+  filter(!armed_with %in% c("unknown", "undetermined") & !is.na(armed_with)) |>
+  mutate(
+    armed_status = case_when(
+      armed_with == "unarmed" ~ "unarmed",
+      TRUE ~ "armed" 
+    )
+  ) |>
+  group_by(gender, armed_status) |>
+  summarise(
+    n = n(),
+    .groups = "drop"
+  ) |>
+  group_by(gender) |>
+  mutate(
+    total = sum(n),
+    percent = round(100 * n / total, 1)
+  )
+
+
+# Display results of code below this codeblock
+armed_binary
+```
+# we could run a cor() test to see if there is correlation between mental health status and fatality
+
+
+### Sentence 5
+
+* **Sentence text**:  Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths.
+
+* **Analysis summary**: We found that Black women accounted for 3.3% of the overall fatal shooting cases where race was known. This is not aligned with the Post's findings of less than 1%. Black women accounted for 19.2% of the women shot and killed and 5.2% of the unarmed deaths. Instead, Native, Asain, and Black men had higher percentages for unarmed deaths. That is weird, the complete opposite of what was reported but we are not sure what is wrong with the code. 
+
+```{r}
+# Put code to reverse engineer sentence here
+overall_per <- fatal_police_shooting |>
+  filter(year(date) <= 2020, !is.na(race)) |>
+  group_by(race, gender) |>
+  summarise(count = n()) |>
+  mutate(percent = (count / sum(count)) * 100)
+
+overall_per <- overall_per |>
+  mutate(
+    race = str_replace_all(race, "A", "asian"),
+    race = str_replace_all(race, "B", "black"),
+    race = str_replace_all(race, "H", "hispanic"),
+    race = str_replace_all(race, "W", "white"),
+    race = str_replace_all(race, "O", "other"), 
+    race = str_replace_all(race, "N", "native american"),
+  )
+
+# Display results of code below this codeblock
+```
+
+
+```{r}
+women_shot_per <- fatal_police_shooting |>
+  filter(year(date) <= 2020, !is.na(race)) |>
+  filter(gender == "female") |>
+  group_by(race) |>
+  summarise(count = n()) |>
+  mutate(percent = (count / sum(count)) * 100)
+
+women_shot_per <- women_shot_per |>
+   mutate(
+    race = str_replace_all(race, "A", "asian"),
+    race = str_replace_all(race, "B", "black"),
+    race = str_replace_all(race, "H", "hispanic"),
+    race = str_replace_all(race, "W", "white"),
+    race = str_replace_all(race, "O", "other"), 
+    race = str_replace_all(race, "N", "native american"),
+  )
+```
+
+
+```{r}
+unarmed_per <- fatal_police_shooting |>
+filter(year(date) <= 2020, !is.na(race)) |>
+filter(armed_with == "unarmed") |>
+group_by(race, gender) |>
+summarise(count = n()) |> 
+mutate(percent = (count / sum(count)) * 100)
+
+
+unarmed_per <- unarmed_per |>
+   mutate(
+    race = str_replace_all(race, "A", "asian"),
+    race = str_replace_all(race, "B", "black"),
+    race = str_replace_all(race, "H", "hispanic"),
+    race = str_replace_all(race, "W", "white"),
+    race = str_replace_all(race, "O", "other"), 
+    race = str_replace_all(race, "N", "native american"),
+  )
+```
+
+```{r}
+all_women|>
+group_by(race,armed_with) |>
+  summarise(
+    count = n()
+  )
+```
+
 
 -30-
