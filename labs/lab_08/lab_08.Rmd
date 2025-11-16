@@ -11,6 +11,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Load libraries and establish settings
 
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ggthemes)
+```
+
+
 **Task** Create a codeblock and load appropriate packages and settings for this lab. We'll be making some charts, working with dates and retrieving Census data.
 
 ## Load and modify data
@@ -20,6 +28,17 @@ knitr::opts_chunk$set(echo = TRUE)
 -   Prince George's County 911 Overdose Calls
 
 You will need to create columns for the date, week and month based on the existing `datetime` column.
+
+
+```{r}
+
+PG_911_calls <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_08/data/prince_georges_2022_overdoses.csv") |> clean_names() 
+
+PG_911_calls <- PG_911_calls |> mutate(month = month(datetime, label=TRUE), week = week(datetime), date=date(datetime)) 
+
+
+```
+
 
 ## Questions
 
@@ -34,6 +53,15 @@ Compare the results here to those from the pre_lab_08 bar chart - are there majo
 **A1.**
 
 ```{r}
+
+PG_911_calls |> group_by(month) |>
+  summarise(total_calls=n()) |>
+  arrange(desc(total_calls)) |>
+  ggplot() + geom_bar(aes(x=month, weight=total_calls)) + labs(
+    title="Calls by Month",
+    x="Month",
+    y="Number of Calls",
+    caption="Source: Prince George's County EMS") 
 ```
 
 **Q2.** Let's visualize this data on a weekly basis using a line chart. As in Q1, generate a dataframe with the total number of calls for each week, and then create a line chart to show the distribution of calls over time. Your line chart must have:
@@ -47,6 +75,22 @@ Describe the pattern of results; you may want to look at the data to dig into pa
 **A2.**
 
 ```{r}
+
+PG_911_calls |> group_by(week) |>
+  summarise(total_calls=n()) |>
+  arrange(desc(total_calls)) |>
+  ggplot() + geom_line(aes(x=week, y=total_calls)) + labs(
+    title="Calls by Week",
+    x="Week",
+    y="Number of Calls",
+    caption="Source: Prince George's County EMS") 
+
+
++ 
+  scale_x_date(date_breaks = "1 week", date_labels = "%b %d") +
+  theme(
+    axis.text.x = element_text(angle = 60,  hjust=1)
+  )
 ```
 
 **Q3.** A scatterplot is a type of chart that helps us see relationships between two variables. One variable goes on the x axis, the other on the y axis. For each row/observation in our data, a scatterplot puts a circle (or a "point") where the two variables intersect on a grid.
@@ -74,5 +118,6 @@ To answer this question, do the following:
 **A3.**
 
 ```{r}
+
 
 ```
