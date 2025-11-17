@@ -21,6 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 # load libraries here
 library(tidyverse)
+library(janitor)
 library(dbplyr)
 ```
 
@@ -33,6 +34,14 @@ You MUST do the following things when answering this question: \* Load the md_go
 **A1.**
 
 ```{r}
+md_gov_county <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_09/data/md_gov_county.csv")
+
+md_gov_county_18 <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_09/data/md_gov_county_18.csv") 
+
+cox_hogan <- md_gov_county |> left_join(md_gov_county_18, by="County") |> mutate(total_18=Hogan+Jealous+Quinn+Schlakman+`Write-ins.y`, total_22=Cox+Moore+Lashar+Wallace+Harding+Sefcik+`Write-ins.x`) |> mutate(pct_Cox=(Cox/total_22)*100, pct_Hogan=(Hogan/total_18)*100) 
+
+write_csv(cox_hogan, "data/md_gov_county.csv") 
+
 ```
 
 **Q2.** You're interested in seeing how the methods of voting have changed in Maryland since 2018. Using the `md_votes_by_type.csv` that has data from the top of the ticket (governor in 2018 and 2022, president in 2020), make a chart showing the percentage of votes cast in each category - early voting, election day and mail - over the three years. You'll need to make those percentages in R and then export the CSV using `write_csv`, then make the chart in Datawrapper. Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect.
@@ -44,6 +53,7 @@ What do you think the story here is? Put the answer below along with the URL of 
 **A2.**
 
 ```{r}
+
 ```
 
 **Q3.** You want to know more about the geography of 911 overdose calls in Montgomery County, Maryland, in 2022. To do that, you'll make a choropleth map in Datawrapper. You will need to:
@@ -61,4 +71,5 @@ What do you think the story here is, and what would you want to know more about?
 **A3.**
 
 ```{r}
+
 ```
