@@ -266,21 +266,23 @@ view(mental_related_case)
 * **Sentence text**:  Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths.
 
 * **Analysis summary**: 
---We found that Black women accounted for 3.3% of the overall fatal shooting cases where race was known. This is not aligned with the Post's findings of less than 1%. 
+--We found that Black women accounted for 0.9% of the overall fatal shooting cases where race was known, which is aligned with the Post's findings of less than 1%. 
 -- Our findings show Black women make up 12.7% of the total population, closely aligned with the Post's finding. They also accounted for 19.2 percent of the women shot and killed. 
---We found Black women made up 5.2 percent of the unarmed deaths, not aligned with the Post's finding of 28 percent. 
+--We found Black women made up 1.8 percent, 7 total, of the unarmed deaths, not aligned with the Post's finding of 28 percent. We are not sure what happened here as women only make up 6.7 percent of unarmed deaths, per our analysis. So we can't say why the Post said Black women made up 28 percent of unarmed deaths when they didn't. 
 --Our findings instead showed that Native, Asian, and Black men had the highest percentages for unarmed deaths. 
 
 Count incidents by combination of race + gender 
 ```{r}
 # Put code to reverse engineer sentence here
-overall_per <- fatal_police_shootings |>
+
+#overall percentage of shootings by race and gender
+overall_pct <- fatal_police_shootings |>
 filter(date <= as.Date("2020-09-04"), !is.na(race)) |>
   group_by(race, gender) |>
-  summarise(count = n()) |>
+  summarise(count = n(), .groups = "drop") |>
   mutate(percent = (count / sum(count)) * 100)
 
-overall_per <- overall_per |>
+overall_pct <- overall_pct |>
   mutate(
     race = str_replace_all(race, "A", "asian"),
     race = str_replace_all(race, "B", "black"),
@@ -290,14 +292,15 @@ overall_per <- overall_per |>
     race = str_replace_all(race, "N", "native american"),
   )
 
-women_shot_per <- fatal_police_shootings |>
+#Percentage of women fatally shot by race
+women_shot_pct <- fatal_police_shootings |>
 filter(date <= as.Date("2020-09-04"), !is.na(race)) |>
   filter(gender == "female") |>
   group_by(race) |>
-  summarise(count = n()) |>
+  summarise(count = n(), .groups = "drop") |>
   mutate(percent = (count / sum(count)) * 100)
 
-women_shot_per <- women_shot_per |>
+women_shot_pct <- women_shot_pct |>
    mutate(
     race = str_replace_all(race, "A", "asian"),
     race = str_replace_all(race, "B", "black"),
@@ -308,16 +311,15 @@ women_shot_per <- women_shot_per |>
   )
 
 
+#percent of total unarmed shootings by race and gender
+unarmed_pct <- fatal_police_shootings |>
+  filter(date <= as.Date("2020-09-04"), !is.na(race)) |>
+  filter(armed_with == "unarmed") |>
+  group_by(race, gender) |>
+  summarise(count = n(), .groups = "drop") |> 
+  mutate(percent = count / sum(count) * 100)
 
-unarmed_per <- fatal_police_shootings |>
-filter(date <= as.Date("2020-09-04"), !is.na(race)) |>
-filter(armed_with == "unarmed") |>
-group_by(race, gender) |>
-summarise(count = n()) |> 
-mutate(percent = (count / sum(count)) * 100)
-
-
-unarmed_per <- unarmed_per |>
+unarmed_pct <- unarmed_pct |>
    mutate(
     race = str_replace_all(race, "A", "asian"),
     race = str_replace_all(race, "B", "black"),
@@ -327,9 +329,19 @@ unarmed_per <- unarmed_per |>
     race = str_replace_all(race, "N", "native american"),
   )
 
-view(unarmed_per)
+view(unarmed_pct)
 
+#percent of total unarmed shootings by gender
+unarmed_pct_gender <- fatal_police_shootings |>
+  filter(date <= as.Date("2020-09-04"), !is.na(race)) |>
+  filter(armed_with == "unarmed") |>
+  group_by(gender) |>
+  summarise(count = n(), .groups = "drop") |> 
+  mutate(percent = count / sum(count) * 100)
 
+view(unarmed_pct_gender)
+
+# Black women vs total population
 us23 <- load_variables(2023, "acs5", cache=TRUE)
 
 us_female_population <- get_acs(geography="us", variables=c(Black="B01001B_017", Total="B01001_026"), year=2023) 
@@ -345,9 +357,10 @@ tidyr::pivot_wider(
 black_female_population
 # Display results of code below this codeblock
 
-view(overall_per)
-view(women_shot_per)
-view(unarmed_per)
+view(overall_pct)
+view(women_shot_pct)
+view(unarmed_pct)
 view(black_female_population)
 ```
+
 -30-
