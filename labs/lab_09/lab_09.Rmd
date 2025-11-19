@@ -31,16 +31,18 @@ library(dbplyr)
 
 You MUST do the following things when answering this question: \* Load the md_gov_county.csv and md_gov_county_18.csv files from the data folder \* Join those dataframes, specifying the join column. \* Add columns to generate percentages for Cox and Hogan. \* Export that joined dataframe to a CSV file using `write_csv`. \* Using that exported CSV, make a chart with Datawrapper. What kind of chart is up to you, so experiment with a few kinds of charts to see what answers the question above in the clearest way. Your chart MUST: \* Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect. \* Easily readable labels and values \* Publish your chart \* Describe your thought process below - why you chose to make the chart you did - and add the URL of your chart.
 
-**A1.**
+**A1.** I chose a grouped bar chart so readers can scroll through and easily see the difference in totals for each county. Because the percentages are grouped next to each other, there is a better sense of scale of the difference in their vote totals. The only drawback is that since it lists each Maryland County, the graph is quite long. 
+
+https://datawrapper.dwcdn.net/0hTdJ/1/
 
 ```{r}
 md_gov_county <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_09/data/md_gov_county.csv")
 
 md_gov_county_18 <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_09/data/md_gov_county_18.csv") 
 
-cox_hogan <- md_gov_county |> left_join(md_gov_county_18, by="County") |> mutate(total_18=Hogan+Jealous+Quinn+Schlakman+`Write-ins.y`, total_22=Cox+Moore+Lashar+Wallace+Harding+Sefcik+`Write-ins.x`) |> mutate(pct_Cox=(Cox/total_22)*100, pct_Hogan=(Hogan/total_18)*100) 
+cox_hogan <- md_gov_county |> left_join(md_gov_county_18, by="GEOID") |> mutate(total_18=Hogan+Jealous+Quinn+Schlakman+`Write-ins.y`, total_22=Cox+Moore+Lashar+Wallace+Harding+Sefcik+`Write-ins.x`) |> mutate(pct_Cox=(Cox/total_22)*100, pct_Hogan=(Hogan/total_18)*100) 
 
-write_csv(cox_hogan, "data/md_gov_county.csv") 
+write_csv(cox_hogan, "data/cox_hogan.csv") 
 
 ```
 
@@ -50,9 +52,18 @@ HINT: In Datawrapper's "Check and Describe" tab, you can click on a column to ge
 
 What do you think the story here is? Put the answer below along with the URL of your chart.
 
-**A2.**
+**A2.** The main story here is the dramatic increase in mail-in votes during the 2020 election. Almost half of all votes were mailed in. But mail-in votes remained much higher than the 2018 election during the 2022 election, even though many COVID-related restrictions had been lifted. Most of the increase in mail-in votes came from early voters. 
+
+https://datawrapper.dwcdn.net/OEEAf/1/
 
 ```{r}
+md_votes_by_type <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_09/data/md_votes_by_type.csv") |> clean_names()
+
+md_votes_by_pct <- md_votes_by_type |> mutate(pct_early=(early/total)*100, pct_election_day=(election_day/total)*100, pct_mail=(mail/total)*100) 
+
+write_csv(md_votes_by_pct, "data/md_votes_by_pct.csv") 
+
+
 
 ```
 
@@ -70,6 +81,15 @@ What do you think the story here is, and what would you want to know more about?
 
 **A3.**
 
+The main story is that overdose calls concentrated in the county's densest areas: Germantown, Gaithersburg, Rockville, Bethesda, etc. I would like to know more about the demographics of the areas with the highest number of calls. You could join Census data with this data to conduct further analysis https://datawrapper.dwcdn.net/BgDw4/1/
+
 ```{r}
+moco_overdose_calls <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_09/data/montgomery_2022_overdoses.csv") 
+
+moco_overdose_calls_totals <- moco_overdose_calls |> group_by(zip) |>
+  summarise(total_calls=n()) |>
+  arrange(desc(total_calls)) |> mutate(all_calls=sum(total_calls), pct_all_calls=(total_calls/all_calls)*100)
+
+write_csv(moco_overdose_calls_totals, "data/moco_overdose_calls_totals.csv") 
 
 ```
