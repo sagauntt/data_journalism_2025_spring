@@ -35,7 +35,7 @@ Let's explore Maryland elections, power outages and electric vehicle data and ma
 
 Get the geometry for Maryland's counties using tigris and, joining that dataframe to your results dataframe, make a county-level map of the differences between Moore and Brown's percentages. What is the story here, and what is the county with the most interesting results?
 
-**A1.**
+**A1.**The story here is that Moore generally out performed Brown across the state. Brown only received a larger share of the vote in Prince George's County and Batlimore City. Moore especially did better in more conservative/rural areas. Moore saw his largest difference in the share of the vote in Queen Anne's County, where he about 7.4 percent more of the vote than Brown. Comparatively, Brown outperformed Moore by 1.6 percent in Prince George's by about 1 percent in Baltimore. I think those are the most interesting counties as they are two of the state's largest and the only ones in which Brown did better. 
 
 ```{r}
 election_results <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_10/data/md_statewide_county.csv") |> clean_names()
@@ -50,10 +50,13 @@ ag_gov <- election_results |> group_by(geoid) |>
     geoid = as.character(geoid)
   ) 
 
+
 md_geom <- counties() |> filter(STATEFP == "24") |> clean_names()  |> rename(county=namelsad) |> mutate(county = str_remove(county, " County")) |> mutate(county = str_to_title(county)) 
+
 
 ag_gov_mapped <- md_geom |> left_join(ag_gov, join_by(geoid)) |> select(geoid, county, total_gov, total_ag, pct_moore, pct_brown, pct_vote_diff, geometry) 
   
+
 ggplot() +
   geom_sf(data=ag_gov_mapped, aes(fill = pct_vote_diff)) +
   scale_fill_gradient2(
@@ -71,10 +74,11 @@ ggplot() +
 
 **Q2.** Make a county-level map to explore the number of customers impacted by power outages in Maryland from last March. Load the `county_outages_march2023.csv` file in the data folder and calculate a rate of customers with outages per 10,000 total customers for each county. Then join that dataframe to your Maryland counties dataframe you made in Q1 and create a county-level map of the results; you may need to tweak the fill scale to make the distinctions clearer. What's the potential story here? Given access to other months' outage data, what would your next steps be in reporting a story?
 
-**A2.**
+**A2.**A potential story here is Talbot county seeing a far higher outage rate compared to any other Maryland county. Talbot had about 1990 customers per 10,000 affected by outages. The next highest county, Charles, only had about 257. Given other months data, I would see if Talbot was the still the highest then, too, if is this month was some outlier. If it was still the highest, then that would definitely be a story. It'd be interesting to note changes over time as well, and see if this issue is getting better, worse, staying the same, etc. 
 
 ```{r}
 county_outages <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_10/data/county_outages_march2023.csv") |> clean_names() 
+
 
 county_outages <- county_outages |> group_by(county) |> 
   summarise (
@@ -82,6 +86,7 @@ county_outages <- county_outages |> group_by(county) |>
 
 
 outages_mapped <- md_geom |> left_join(county_outages, join_by(county)) |> select(county, outages_rate, geometry) 
+
 
 ggplot() +
   geom_sf(data=outages_mapped, aes(fill = outages_rate)) +
@@ -102,15 +107,17 @@ Then, calculate a per capita rate of electric & hybrid vehicles using the March 
 
 Finally, make a second county map showing the per capita rate. What counties stand out on this map? How is it different from the first one you made?
 
-**A3.**
+**A3.** Montgomery and Howard stand out as they had the highest per capita increase. That's different than the first result showing percent change, which had Caroline county as the highest percent increase at about 426 percent. 
 
 ```{r}
 md_ev_hybrids <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/labs/lab_10/data/ev_2020_2023.csv") |> clean_names() 
+
 
 ev_hybrids_change <- md_geom |> left_join(md_ev_hybrids, join_by(county)) |> group_by(county) |>
   mutate(
     pct_change = ((march_2023-july_2020)/july_2020)*100
   ) |> select(county, july_2020, march_2023, pct_change, geometry) 
+
 
 md_county_population <- get_acs(geography = "county",
               variables = c(population = "B01001_001"),
@@ -119,16 +126,18 @@ md_county_population <- get_acs(geography = "county",
   mutate(county = str_remove(county, " County, Maryland"),
          county = str_remove(county, ", Maryland")) |> mutate(county = str_to_title(county)) 
 
+
 ev_hybrids_change_mapped <- ev_hybrids_change |> left_join(md_county_population, join_by(county)) |> group_by(county) |> mutate(increase_per_capita = (march_2023/estimate)*1000) |>
   select(county, july_2020, march_2023, pct_change, increase_per_capita, estimate, geometry) 
+
 
 ggplot() +
   geom_sf(data=ev_hybrids_change_mapped, aes(fill = increase_per_capita)) +
   scale_fill_viridis_b(option="magma", trans = "log") +
   theme_minimal() +
   labs(
-    title = "Howard County had largest increase in EV and Hyrbid vehicle use",
-    subtitle = "Electric and Hybrid vehicles ",
-    fill = "Vehicles per 1000 residents") 
+    title = "Howard County sees largest increase in EV and Hybrid vehicle use",
+    subtitle = "The number of EVs and Hyrbrids increased in each county from July 2020 to March 2023",
+    fill = "Increase in vehicles per 1000 residents") 
   
 ```
