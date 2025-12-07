@@ -20,10 +20,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this notebook, we are coding Maryland Notices of Intent to Foreclose by Zip Code from Maryland's Open Data Portal. Link to URL: <https://opendata.maryland.gov/Housing/Maryland-Notices-of-Intent-to-Foreclose-by-Zip-Cod/ftsr-vapt/about_data> 
 
-## Introduction 
-
-In this notebook, we are coding Maryland Notices of Intent to Foreclose by Zip Code from Maryland's Open Data Portal. Link to URL: <https://opendata.maryland.gov/Housing/Maryland-Notices-of-Intent-to-Foreclose-by-Zip-Cod/ftsr-vapt/about_data> 
-
 ## Load libraries
 
 Loading required libraries for this analysis.
@@ -71,18 +67,17 @@ Notes and Caveats:
 - We will need to join census data for demographic/rate questions. Everything else should be in this dataset.
   - 'zip' is correctly listed as a character, so this way we can join it easily. If it is needed as a number, then we must change it. 
   - All the months are listed as a numeric data type. 
-  - We need to make more aggregated dataframes for our analyses. 
-
+  - We need to make more aggregated dataframes for our analyses.
 
 ```{r}
 # Load required data
 # Path to data should be loaded from folder "data" i.e. read_csv("data/name_of_data.csv")
 # Clean required data and prepare for analysis if needed. 
 
-md_foreclosure_notices_zipcode <- read_csv("~/Documents/GitHub/data_journalism_2025_spring/major_assignments/data_analysis/data/Maryland_Notices_of_Intent_to_Foreclose_by_Zip_Code_20251122.csv") |>
+md_foreclosure_notices_zipcode <- read_csv("data/md_foreclosure_notices_zipcode.csv") |>
   clean_names()
 
-view(md_foreclosure_notices_zipcode)
+View(md_foreclosure_notices_zipcode)
 
 glimpse(md_foreclosure_notices_zipcode)
 ```
@@ -93,65 +88,148 @@ In this notebook, we are coding five sentences using the state data.
 ### Sentence 1
 
 * **Which zipcode has the highest number of foreclosure notices total, and which has the highest rate over the four year period? Where are those areas?**
-* **XXXX**: [Write up two to three sentences describing the results of your analysis.]
+* **XXXX**: The zip code 20772 had the most notices to foreclose of the dataset at 6,877 and therefore the highest rate of 132.25 notices per month. It's located in Prince George's County and encompasses much of Upper Marlboro. The next highest is the area neighboring directly North, zip code 20774 at 5,856 notices of 112.62 per month. The zipcode with the third most notices and the last with a rate above 100 is 21206 in Baltimore City, with 5551 notices at 106.75 a month. Generally the top zipcodes appear to be in Prince Goerge's or Baltimore City and County. 
 
 ```{r}
 # Put code here
+md_foreclosures_long <- md_foreclosure_notices_zipcode |>
+  pivot_longer(cols = contains("_"), names_to = "month", values_to = "foreclosures") |>
+  mutate(
+    month = dmy(paste("01", str_replace(month, "_", " "))),
+    year = year(month)
+  )
 
-
-
+# Use above dataframe for analysis but don't modify - date columns for month and year made and pivoted for easier use
+  
+md_foreclosures_summary <- md_foreclosures_long |>
+  group_by(zip) |>
+  summarise(total = sum(foreclosures, na.rm = TRUE),
+            months = n(),
+            avg_per_month = total / months
+  ) |>
+  arrange(desc(total))
 # Display results of code below this codeblock
-
+md_foreclosures_summary
 ```
 
 ### Sentence 2
 
 * **What month has the highest number of foreclosure notices? What about year? Are there any differences or similarities between the month that has the highest and the year that has the highest? Why might this be?**
-* **XXXX**: [Write up two to three sentences describing the results of your analysis.]
+* **XXXX**: 2021 is dwarfed by the other years at 14027 foreclosure notices. This could be because it is only a half year of data (July - December), but it still seems small compared to the next highest year, 2022, at 55369. The notices seem to increase every year, with the only discrepancy being 2025 under 2024 with 74930 versus 79577 notices. However, 2025 is also an incomplete year with its data ending in October, so the trend seems legitimate. The top three months are in 2025, and generally the months themselves don't seem to correlate much with any trends. 
 
 ```{r}
 # Put code here
+month_foreclosures <- md_foreclosures_long |>
+  group_by(month) |>
+  summarise(total = sum(foreclosures, na.rm = TRUE),
+  ) |>
+  arrange(desc(total))
 
+year_foreclosures <- md_foreclosures_long |>
+  group_by(year) |>
+  summarise(total = sum(foreclosures, na.rm = TRUE),
+  ) |>
+  arrange(desc(total))
 
 # Display results of code below this codeblock
-
+month_foreclosures 
+year_foreclosures
 ```
 
 ### Sentence 3
 
 * **What are the majority racial demographics of zip codes with notably high or low foreclosure rates? How about their median income?**
-* **XXXX**: [Write up two to three sentences describing the results of your analysis.]
+* **XXXX**: 9 of the top 10 zip codes are majority black, and the case seems the same for the majority of zip codes with above 50 foreclosure notices per month. The bottom of the list has many zip codes with unavailable demographic statistics but as they start to show up, white majority zips become frequent. The top two zip codes have very high median incomes but beyond that there doesn't seem to be any correlation to notices as the statistic begins to vary widely. 
 
 ```{r}
-# Put code here
-
+#Make sure API is installed: census_api_key("your_key", install = TRUE)
+#Put code here
+race_income <- get_acs(
+  geography = "zcta",
+  variables = c(
+    median_income = "B19013_001",
+    total_pop = "B02001_001",
+    white = "B02001_002",
+    black = "B02001_003",
+    native = "B02001_004",
+    asian = "B02001_005"
+  ),
+  year = 2022,
+  survey = "acs5",
+  output = "wide"
+) |>
+  rename(zip = GEOID) |>
+  mutate() |>
+  mutate(
+    zip = as.character(zip),
+    pct_white = whiteE / total_popE,
+    pct_black = blackE / total_popE,
+    pct_asian = asianE / total_popE,
+    pct_native = nativeE / total_popE
+    )
+  
+census_foreclosures_summary <- md_foreclosures_summary |>
+  left_join(race_income, by = "zip") |>
+  arrange(desc(total))
 
 # Display results of code below this codeblock
+census_foreclosures_summary
 
 ```
 
 ### Sentence 4
 
 * **Which zip codes have had the largest increase in foreclosures from July 2021 to October 2025? Which had the largest decrease? Are these in similar areas?**
-* **XXXX**: [Write up two to three sentences describing the results of your analysis.]
+* **XXXX**: 20772 had the largest increase in foreclosure notices from July 2021 to October 2025, with a 199 foreclosure difference. While, 20618 and nine other zip codes had less foreclosures in October 2025 (can add the other zip codes too and locate those areas). There were many other zip codes that had zero change, specifically, some had 0 foreclosures in July 2021 and October 2025. For this question, I'll compare 20772 and 20618. It seems to be that 20772 is a zipcode in Prince George's County, covering most of Upper Marlboro. And 20618 is a zipcode in St. Mary's County, covering towns like Bushwood and Yellowbank. These areas are vastly differently since 20722 consists of a more suburban almost urban city and 20618 consists towns that are quite rural.
 
 ```{r}
 # Put code here
+foreclosure_change <- md_foreclosure_notices_zipcode |>
+  select(zip, july_2021, october_2025) |>
+  mutate(
+    change = october_2025 - july_2021
+  )
 
+largest_increase <- foreclosure_change |>
+  arrange(desc(change)) 
+
+largest_decrease <- foreclosure_change |>
+  arrange(change)
 
 # Display results of code below this codeblock
-
+largest_increase
+largest_decrease
 ```
 
 ### Sentence 5
 
-* **How many foreclosures are there in Maryland’s lowest-income zip codes? How many foreclosures in high-income zip codes? Where are these areas located?**
-* **XXXX**: [Write up two to three sentences describing the results of your analysis.]
+* **How many foreclosures are there in Maryland's lowest-income zip codes? How many foreclosures in high-income zip codes? Where are these areas located?**
+* **XXXX**: In Maryland's ten highest median income zip codes, the number of notices of intent to foreclosure reported over the roughly 4-year time frame tracked by this dataset ranged from about 37 to 314 notices per 10,000 residents. The raw totals ranged from 4 to 558. These zip codes had a minimum household income ranging betwene 228,000 and 250,000 dollars per year. The zip codes are almost all suburbs in Montgomery and Howard counties, with the exception of 21056, which encompasses Gibson's Island outside Annapolis in Anne Arundel County. Comparatively, the 10 lowest median income zip codes saw averages ranging from zero to 653 notices served per 10,000 residents over the same time frame. The raw totals ranged from 0 to 1644 notices reported. Only one zip code had zero notices of intent to foreclose: 20890, which covers what appears to be a mostly-commercial area in Gaithersburg containing a single apartment complex. The zip with the next-lowest rate of foreclosures was 21835, which is located on the Eastern Shore and had a rate of about 130 per 10,000 residents. The low-income zip codes were mostly located in Baltimore, but there were also locations on the Eastern Shore and in Western Maryland. Overall, the lowest-income zip codes had a far higher number of notices of intent to foreclose than the high-income areas. Six out of the 10 lowest-median income zip codes had a rate of more than 400 notices reported per 10,000 residents. 
 
 ```{r}
 # Put code here
 
+county_income <- get_acs(
+  geography = "zcta",
+  variables = c(median_income = "B19013_001",
+                total_pop = "B02001_001"),
+  year = 2022,
+  survey = "acs5",
+  output="wide"
+) |>
+  rename(zip = GEOID) |>
+  mutate(zip = as.character(zip)) 
+
+foreclosures_by_income <- md_foreclosures_summary |> left_join(county_income, join_by(zip)) |> rename(total_foreclosures = total, median_income = median_incomeE, population = total_popE) |> mutate(foreclosure_rate=(total_foreclosures/population)*10000) 
+
+foreclosures_lowest_income <- foreclosures_by_income |> select(zip, total_foreclosures, median_income, population, foreclosure_rate) |> arrange(median_income) 
+
+foreclosures_highest_income <- foreclosures_by_income |> select(zip, total_foreclosures, median_income, population, foreclosure_rate) |> arrange(desc(median_income)) 
 
 # Display results of code below this codeblock
 
+foreclosures_highest_income 
+
+foreclosures_lowest_income
 ```
+
