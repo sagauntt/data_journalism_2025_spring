@@ -23,6 +23,7 @@ library(rvest)
 library(lubridate)
 library(janitor)
 library(tidyverse)
+library(tidytext) 
 
 ```
 
@@ -32,11 +33,29 @@ Let's get to scraping.
 
 **Q1**. Scrape the listing of available Maryland physician disciplinary alerts at <https://www.mbp.state.md.us/disciplinary_2024.aspx> into a dataframe. You should have three columns, one of which is a date, so make sure the date column has a date datatype. What's the most common sanction, and how many times is it mentioned in the 2024 alerts?
 
-**A1** 
+**A1** The most common sanctions were summary suspension and the surrender of their medical license. Both were mentioned 7 times.
 
 ```{r}
 
+alerts_url <- "https://www.mbp.state.md.us/disciplinary_2024.aspx" 
 
+alerts_results <- alerts_url |>
+  read_html() |>
+  html_table() 
+
+alerts_results <- alerts_results[[1]] |>
+  clean_names() |>
+  mutate(date = mdy(date)) 
+
+glimpse(alerts_results) 
+
+most_common_sanctions <- alerts_results |> group_by(sanction) |>
+  summarise(
+    total_count = n()
+  ) |>
+  arrange(desc(total_count)) 
+
+most_common_sanctions
 
 ```
 
@@ -44,9 +63,21 @@ Let's get to scraping.
 
 When you finish scraping into a dataframe, write code to find the press releases that have the word "police" in the title.
 
-**A2** 
+**A2** The 35 press releases highlighted in the police_mentions dataframe contain the word "police."
 
 ```{r}
+
+OPD_url <- "https://www.opd.state.md.us/press-releases" 
+
+OPD_results <- OPD_url |>
+  read_html() 
+
+OPD_releases <- OPD_results |> html_elements('span') |> html_text() |> as_tibble() |> separate(value, c('date', 'title'), sep=":", extra = "merge", fill = "right") |> drop_na(title) |> mutate(title = str_squish(title), date = mdy(date)) 
+
+police_mentions <- OPD_releases  |>
+  filter(str_detect(str_to_lower(title), "police")) 
+
+police_mentions
 
 ```
 
@@ -60,8 +91,21 @@ When you're done, rename the columns so they make sense, then make sure the date
 
 Finally, tell me what questions you could ask of this data if you had all of his press releases. Be creative.
 
-**A3**
+**A3**If I had this dataframe over the entire period of time covered by his website, I think it'd be interesting to see how often certain phrases or terms are mentioned over time, and how they've changed. For example, I'd look at if terms such as "Immigration" or "ICE" have increased in use since Donald Trump resumed office. Additionally, has the use of terms like "DEI" or "Climate" shifted over time? It'd be interesting to determine if the intense scrutiny on climate or diversity initiatives from the administration had any effect on how often they come up in Van Hollen's press releases. It'd also be interesting to come up with a list of the his most-frequently-used words in press releases. 
 
 ```{r}
+VH_url <- "https://www.vanhollen.senate.gov/news/press-releases" 
+
+VH_results <- VH_url |> read_html() 
+
+VH_titles <- VH_results |> html_elements('h2.ArticleTitle') |> html_text() |> as_tibble() 
+
+VH_date <- VH_results |> html_elements('p.Heading.Heading--time.mb-1') |> html_text() |> as_tibble() 
+  
+VH_link <- VH_results |> html_elements("a.ArticleBlock__moreLink") |> html_attr("href") |> as_tibble() 
+
+VH_releases <- bind_cols(VH_titles, VH_date, VH_link) |> rename(title=value...1, date=value...2, link=value...3) |> mutate(title = str_squish(title), date = mdy(date)) 
+
+VH_releases  
 
 ```

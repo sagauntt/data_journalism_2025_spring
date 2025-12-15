@@ -42,7 +42,7 @@ Let's read in this data and examine it:
 **Task** Run the following code and describe the dataframe it outputs. **Answer** The result is a dataframe where each row is a disciplinary alert against an individual practitioner and each column is a different piece of information, such as the case id, url, first name, last name, type of discipline, year and the actual text of the alert. 
 
 ```{r}
-alerts <- read_rds("data/md_doc_alerts.rds")
+alerts <- read_rds("data/md_doc_alerts.rds") 
 ```
 
 What we want to do is to make the `text` column easier to analyze. Let's say we want to find out the most commonly used words. We'll want to remove URLs from the text of the releases since they aren't actual words. Let's use mutate to make that happen:

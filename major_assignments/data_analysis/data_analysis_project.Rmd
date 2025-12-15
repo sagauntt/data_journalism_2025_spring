@@ -68,6 +68,9 @@ Notes and Caveats:
   - 'zip' is correctly listed as a character, so this way we can join it easily. If it is needed as a number, then we must change it. 
   - All the months are listed as a numeric data type. 
   - We need to make more aggregated dataframes for our analyses.
+  
+  
+  
 
 ```{r}
 # Load required data
@@ -77,7 +80,7 @@ Notes and Caveats:
 md_foreclosure_notices_zipcode <- read_csv("data/md_foreclosure_notices_zipcode.csv") |>
   clean_names()
 
-View(md_foreclosure_notices_zipcode)
+md_foreclosure_notices_zipcode
 
 glimpse(md_foreclosure_notices_zipcode)
 ```
