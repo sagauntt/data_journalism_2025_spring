@@ -248,28 +248,30 @@ The pattern mirrors national reporting showing that foreclosure risk is rising f
 
 This story is not about a statewide spike. It’s about geographic and racial concentration, and how some Maryland neighborhoods are facing significantly higher housing instability than others as pandemic-era protections fade. 
 
+
 Preliminary analysis results
 
 Our analysis of Maryland Notices of Intent to Foreclose filed in each zip code from July 2021 through October 2025 shows that foreclosure activity is highly concentrated in a few areas rather than broadly distributed. Zip codes in Prince George’s County, particularly 20772 and 20774, which are both located in and around Upper Marlboro, stand out dramatically from the rest of the state. Those areas have total notice counts several times higher than most other Maryland zip codes. They have also seen some of the largest increases over time, indicating that this is a long-term issue rather than short-term pressure.
 
 When foreclosure data is joined with Census demographics, a clear racial pattern emerges. Nine of the ten zip codes with the highest foreclosure totals are majority Black, while zip codes with very low foreclosure activity are more likely to be majority White or have sparse residential populations. Income patterns reinforce this divide: The lowest-income zip codes experienced far higher foreclosure rates per capita than the highest-income zip codes.
 
-These findings are consistent with widespread media reports on post-pandemic foreclosure risk, but they provide a localized, zip code-level view that has not been widely reported in Maryland. This data allows us to tell a story about where exactly in Maryland there is housing instability. And not just by the county or town, but potentially by specific neighborhoods as well. 
+These findings are consistent with widespread media reports on post-pandemic foreclosure risk, but they provide a localized, zip code-level view that has not been widely reported in Maryland. This data allows us to tell a story about where exactly in Maryland there is housing instability. And not just by the county or town, but potentially by specific neighborhoods as well.
+
 
 Pros and cons of data
 	
 Pros: 
-The dataset covers every Maryland zip code and spans more than four years, allowing for both geographic and demographic comparisons (after using the census data), making it easy for trend analysis. 
-Monthly counts make it possible to identify sustained increases rather than isolated spikes. 
-By combining the foreclosures dataset with U.S. Census data, we can analyze racial, economic and other demographic disparities at the zip code or county level. 
-The data is published by the Maryland Office of Financial Regulation, lending it institutional credibility and consistency.
+-The dataset covers every Maryland zip code and spans more than four years, allowing for both geographic and demographic comparisons (after using the census data), making it easy for trend analysis. 
+-Monthly counts make it possible to identify sustained increases rather than isolated spikes. 
+-By combining the foreclosures dataset with U.S. Census data, we can analyze racial, economic and other demographic disparities at the zip code or county level. 
+-The data is published by the Maryland Office of Financial Regulation, lending it institutional credibility and consistency.
 
 Cons: 
-The data reflects notices of intent to foreclose, not completed foreclosures or court filings, meaning it captures risk and pressure rather than outcomes.
-Zip codes vary widely in population and housing stock, so raw counts alone can be misleading without per-capita adjustments.
-No information is provided about property type, loan type or borrower circumstances. 
-The dataset could contain reporting errors and may not perfectly align with court foreclosure records. 
-Demographic and income data needed to be joined from external sources, which have margins of error and could require additional assumptions. 
+-The data reflects notices of intent to foreclose, not completed foreclosures or court filings, meaning it captures risk and pressure rather than outcomes.
+-Zip codes vary widely in population and housing stock, so raw counts alone can be misleading without per-capita adjustments.
+-No information is provided about property type, loan type or borrower circumstances. 
+-The dataset could contain reporting errors and may not perfectly align with court foreclosure records. 
+-Demographic and income data needed to be joined from external sources, which have margins of error and could require additional assumptions. 
 
 Next steps to confirm findings
 
