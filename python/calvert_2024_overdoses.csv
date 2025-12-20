@@ -1,0 +1,52 @@
+FATAL/NON-FATAL,TIME,DATE,BLOCK,ROAD/CITY OF INCIDENT,ZIP CODE OF INCIDENT,AGE,RACE,SEX,NALOXONE?,# OF DOSES,SUSPECTED OVERDOSE DRUG/CAUSE OF DEATH
+Non-fatal,1306HRS,1/6/24,3700,"Pinewood Ct, Chesapeake Beach",20732,62,W,M,Yes,3,Oxycodone
+Non-fatal,1301HRS,1/13/24,250,"Town Square Dr, Lusby",20657,38,B,M,Unknown,N/A,Heroin/fentanyl
+Non-fatal,2158HRS,1/13/24,3900,"26th St, Chesapeake Beach",20732,55,B,F,Yes,3,Fentanyl
+Non- fatal,1731HRS,2/3/24,2200,"Garrity Rd, St Leonard",20685,45,W,M,Yes,1,Unknown
+FATAL,1644HRS,2/10/24,3500,"Ponds Wood Dr, Chesapeake Beach",20732,52,W,M,No,N/A,Acute combined Fentanyl and Despropionyl Fentanyl Intoxication 
+FATAL,2119HRS,2/11/24,4200,"Christiana Parran Rd, Chesapeake Beach",20732,30,W,F,Yes,1,"Fentanyl, Methadone, Bromazolam, Despropionyl Fentanyl, para-Fluorofentanyl and Acrylfentanyl Intoxication"
+Non-fatal,0259HRS,2/27/24,3000,"Bicentennial Ct, Port Republic",20676,27,W,F,Yes,2,Perc 30s (fentanyl)
+Non-fatal,2223HRS,2/28/24,4800,"Calvert Dr, St Leonard",20685,47,W,M,Yes,2,Unknown
+FATAL,1505HRS,2/29/24,6300,"15th St, Chesapeake Beach",20732,45,W,M,No,N/A,Acute Fentanyl Intoxication
+Non-fatal,1634HRS,3/2/24,3100,"W Ward Rd, Dunkirk",20754,34,B,M,No,N/A,Heroin/fentanyl
+Non-fatal,1656HRS,3/2/24,850,"Warner Dr, Huntingtown",20639,44,W,F,No,N/A,Prescription meds
+Non-fatal,1000HRS,3/5/24,3000,"Ponds Wood Rd, Huntingtown",20639,30,W,F,Yes,2,Cocaine/fentanyl
+Non-fatal,1000HRS,3/5/24,3000,"Ponds Wood Rd, Huntingtown",20639,38,B,M,Yes,2,Cocaine/fentanyl
+Non-fatal,2218HRS,3/11/24,300,"Thunderbird Dr, Lusby",20657,33,B,M,Yes,1,Fentanyl 
+Non-fatal,2031HRS,3/16/24,3400,"Churchill Ct, Owings",20736,50,W,F,No,N/A,Fentanyl 
+Non-fatal,2234HRS,3/17/24,3400,"Churchill Ct, Owings",20736,50,W,F,No,N/A,Fentanyl 
+Non-fatal,2318HRS,4/5/24,8600,"Baywalk Sq, Chesapeake Beach",20732,35,W,F,No,N/A,Meth/Alcohol
+Non-fatal,1205HRS,4/13/24,,"8th St/Dayton Ave, North Beach",20714,32,W,F,Yes,2,"Fentanyl (admitted to taking a ""Perc"")"
+FATAL,1750HRS,5/1/24,9000,"Mary Ann Dr, Owings",20736,47,W,F,No,N/A,Methadone Toxicity
+Non-fatal,1600HRS,5/5/24,2100,"Sixes Rd, Prince Frederick",20678,41,B,M,Yes,2,Unknown
+Non-fatal,1903HRS,5/6/24,2900,"Plaza Dr, Dunkirk",20754,29,W,F,No,N/A,Heroin
+Non-fatal,1626HRS,5/10/24,3800,"Breezy Point Rd, Chesapeake Beach",20732,34,B,M,Yes,1,Crack/cocaine
+Non-fatal,2340HRS,5/13/24,5300,"St Leonard Rd, St Leonard",20685,27,W,M,No,N/A,Marijuana
+Non-fatal,0217HRS,5/16/24,8300,"F St, Chesapeake Beach",20732,37,W,M,Yes,1,Heroin
+Non-fatal,1939HRS,5/17/24,10500,"Mackall Rd, St Leonard",20685,25,W,M,Yes,2,Unknown
+Non-fatal,1930HRS,5/19/24,,"Sansbury Dr/Clear Spring Dr, Ches Beach",20732,29,W,M,Yes,2,Possibly Kratom
+FATAL,0654HRS,5/27/24,1200,"E Mt Harmony Rd, Owings",20736,61,W,F,No,N/A,"Alcohol, Oxycodone, Trazodone and Oxymorphone"
+Non-fatal,0135HRS,6/15/24,3800,"7th St, North Beach",20714,32,W,F,Yes,3,Fentanyl
+Non-fatal,0604HRS,6/19/24,5300,"St Leonard Rd, St Leonard",20685,27,W,M,Unknown,N/A,Fentanyl
+Non-fatal,0739HRS,6/21/24,2000,"Boyds Trail, Owings",20736,36,W,F,Yes,1,Crack
+Non-fatal,2349HRS,6/21/24,400,"W Dares Beach Rd, Prince Frederick",20678,53,B,M,Yes,2,Cocaine and fentanyl
+Non-fatal,0253HRS,6/29/24,4900,"Huntgintown Rd, Huntingtown",20639,37,W,M,Yes,1,Unknown
+FATAL,1833HRS,6/30/24,2200,"Eagle View Ct, Chesapeake Beach",20732,30,W,M,Yes,1,Acute Mitragynine Intoxication (Active compound in Kratom)
+Non-fatal,2106HRS,7/5/24,,"Windmill Dr/St Leonard Rd, St Leonard",20685,33,W,F,Yes,2,Tylenol with codeine
+Non-fatal,0453HRS,7/6/24,11900,"Pine Trail, Lusby",20657,29,W,F,Yes,1,Unknown
+Non-fatal,1929HRS,7/26/24,120,"Fairground Rd, Prince Frederick",20678,26,W,F,Yes,3,Edibles
+Non-fatal,0828HRS,7/27/24,75,"Main St, Prince Frederick",20678,56,W,M,Yes,2,Crack
+FATAL,0616HRS,8/10/24,300,"Arthur King Rd, Prince Frederick",20678,39,W,F,No,N/A,"Fentanyl, Despropionyl Fentanyl, para-Fluorofentanyl, and Xylazine"
+Non-fatal,0042HRS,8/15/24,1100,"Stable Ln, Lusby",20657,39,W,M,Yes,8,Fentanyl 
+Non-fatal,2231HRS,8/22/24,3500,"Williams Wharf Rd, St Leonard",20685,36,B,F,Yes,2,"Alcohol and ""perc"""
+Non-fatal,2358HRS,8/24/24,550,"Omaha Hill Dr, Lusby",20657,17,W,F,No,N/A,THC cartridge caused seizures
+Non-fatal,0835HRS,9/3/24,3700,"7th St, North Beach",20714,36,W,M,Yes,1,Unknown
+Non-fatal,0846HRS,9/7/24,3700,"7th St, North Beach",20714,65,W,F,Yes,2,Unknown
+Non-fatal,2101HRS,9/9/24,5100,"Rosemary Dr, Chesapeake Beach",20732,56,W,M,Yes,1,Percocet/fentanyl
+FATAL,1600HRS,9/10/24,5100,"Rosemary Dr, Chesapeake Beach",20732,56,W,M,No,N/A,"Fentanyl, para-Fluorofentanyl, and Despropionyl Fentanyl"
+FATAL,1113HRS,10/3/24,9600,"Howes Rd, Dunkirk",20754,54,B,F,No,N/A,Cocaine Intoxication Complicating Cardiovascular Disease 
+Non-fatal,0000HRS,10/27/24,490,"Stamper Ct, Prince Frederick",20678,18,B,M,No,N/A,LSD
+Non-fatal,2252HRS,11/22/24,11200,"Hickok Lane, Lusby",20657,29,W,M,Yes,3,Fentanyl
+FATAL,1056HRS,11/24/24,110,"Buckler Rd, Huntingtown",20639,40,W,M,No,N/A,Unknown
+Non-fatal,2246HRS,12/7/24,9100,"Hall Ct, Owings",20736,40,W,F,No,N/A,Prescription meds
+Non-fatal,1212HRS,12/17/24,11300,"HG Trueman Rd, Lusby",20657,31,W,M,Yes,3,Opiates
