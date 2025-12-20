@@ -235,4 +235,55 @@ foreclosures_highest_income
 
 foreclosures_lowest_income
 ```
+***
+Final Memo 
 
+What’s the news? 
+
+The pressure from rising foreclosure filings in Maryland is disproportionately affecting several predominantly Black communities. According to our analysis of state data, notices of intent to foreclose are sharply concentrated in a small number of zip codes, many of which are majority Black communities in Prince George’s County, where foreclosure notices have surged steadily since 2021. One Upper Marlboro-area zip code alone logged nearly 7,000 foreclosure notices in just over four years, far outpacing the rest of the state. 
+
+So what? 
+
+The pattern mirrors national reporting showing that foreclosure risk is rising fastest in communities that are already economically vulnerable. This data reveals exactly where that stress is landing in Maryland. 
+
+This story is not about a statewide spike. It’s about geographic and racial concentration, and how some Maryland neighborhoods are facing significantly higher housing instability than others as pandemic-era protections fade. 
+
+Preliminary analysis results
+
+Our analysis of Maryland Notices of Intent to Foreclose filed in each zip code from July 2021 through October 2025 shows that foreclosure activity is highly concentrated in a few areas rather than broadly distributed. Zip codes in Prince George’s County, particularly 20772 and 20774, which are both located in and around Upper Marlboro, stand out dramatically from the rest of the state. Those areas have total notice counts several times higher than most other Maryland zip codes. They have also seen some of the largest increases over time, indicating that this is a long-term issue rather than short-term pressure.
+
+When foreclosure data is joined with Census demographics, a clear racial pattern emerges. Nine of the ten zip codes with the highest foreclosure totals are majority Black, while zip codes with very low foreclosure activity are more likely to be majority White or have sparse residential populations. Income patterns reinforce this divide: The lowest-income zip codes experienced far higher foreclosure rates per capita than the highest-income zip codes.
+
+These findings are consistent with widespread media reports on post-pandemic foreclosure risk, but they provide a localized, zip code-level view that has not been widely reported in Maryland. This data allows us to tell a story about where exactly in Maryland there is housing instability. And not just by the county or town, but potentially by specific neighborhoods as well. 
+
+Pros and cons of data
+	
+Pros: 
+The dataset covers every Maryland zip code and spans more than four years, allowing for both geographic and demographic comparisons (after using the census data), making it easy for trend analysis. 
+Monthly counts make it possible to identify sustained increases rather than isolated spikes. 
+By combining the foreclosures dataset with U.S. Census data, we can analyze racial, economic and other demographic disparities at the zip code or county level. 
+The data is published by the Maryland Office of Financial Regulation, lending it institutional credibility and consistency.
+
+Cons: 
+The data reflects notices of intent to foreclose, not completed foreclosures or court filings, meaning it captures risk and pressure rather than outcomes.
+Zip codes vary widely in population and housing stock, so raw counts alone can be misleading without per-capita adjustments.
+No information is provided about property type, loan type or borrower circumstances. 
+The dataset could contain reporting errors and may not perfectly align with court foreclosure records. 
+Demographic and income data needed to be joined from external sources, which have margins of error and could require additional assumptions. 
+
+Next steps to confirm findings
+
+To confirm our analysis and further contextualize our findings, we would:
+Compare notice counts with Maryland court foreclosure filings to assess how often notices lead to formal cases. 
+Interview officials from the state's Office of Financial Regulation (which is under the Maryland Department of Labor) about the methodology used to collect the foreclosure notices, the quality of the data and any trends they are seeing. 
+Talk with housing advocates, legal aid organizations and foreclosure prevention counselors in high-impact zip codes.
+Request comment from county housing officials in Prince George’s County, Baltimore City and Baltimore County.
+Seek response from lenders or banking associations if the data suggests concentrated lending risk. 
+No claims of wrongdoing would be made without giving agencies and lenders a full and reasonable opportunity to respond. 
+
+Reporting plan
+
+To finish reporting the story, we would ground our analysis of the data in lived experiences. This would include interviewing homeowners and renters in the most affected zip codes, particularly in Prince George’s County, to understand how foreclosure pressure affects real households and the impact on local communities. We would speak with foreclosure counselors, housing attorneys and community organizations that work directly with residents facing foreclosure, such as from Community Legal Services of Prince George’s County’s Foreclosure Clinic. 
+
+We would also visit at least one high-impact neighborhood, perhaps including one of the two in Upper Marlboro, to report on visible signs of housing distress, such as vacant properties or community stabilization efforts, and contrast that with conditions in high-income zip codes with minimal foreclosure activity. Joining zip code-level data with on-the-ground reporting and expert interviews would move the story beyond numbers and clearly show readers how unevenly housing instability is distributed across Maryland. 
+***
